@@ -1,3 +1,4 @@
 include_directories(include)
-add_library(utils STATIC src/util.cpp)
+FILE(GLOB src_files *.cpp)
+add_library(utils STATIC ${src_files})
 target_include_directories(utils PUBLIC include)
