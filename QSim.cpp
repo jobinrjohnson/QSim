@@ -6,11 +6,17 @@
  */
 
 #include <iostream>
+#include <string>
+#include <util.h>
+
 using namespace std;
+
+extern int a;
+int a=30;
 
 int main(int argc, char **argv) {
 
-	cout << "Hey There";
+	printdebug("Hey There : ");
 	return 0;
 
 }

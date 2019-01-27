@@ -1,6 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
 project (QSim)
 
+add_subdirectory(implementation)
 add_subdirectory(utils)
 
 add_executable(QSim QSim.cpp)
