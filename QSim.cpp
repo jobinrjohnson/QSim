@@ -11,12 +11,11 @@
 
 using namespace std;
 
-extern int a;
-int a=30;
+int LOG_LEVEL = LOG_LEVEL_VERBOSE;
 
 int main(int argc, char **argv) {
 
-	printdebug("Hey There : ");
+	printdebug(LOG_LEVEL_INFO, "Simulator Started");
 	return 0;
 
 }
