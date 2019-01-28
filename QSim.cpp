@@ -9,6 +9,8 @@
 #include <string>
 #include <util.h>
 
+#include <qubit.h>
+
 using namespace std;
 
 int LOG_LEVEL = LOG_LEVEL_VERBOSE;
@@ -16,6 +18,9 @@ int LOG_LEVEL = LOG_LEVEL_VERBOSE;
 int main(int argc, char **argv) {
 
 	printdebug(LOG_LEVEL_INFO, "Simulator Started");
+
+	qubit q1 =  qubit(1,0);
+
 	return 0;
 
 }
