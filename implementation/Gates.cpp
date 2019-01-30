@@ -5,7 +5,7 @@
  *      Author: jobinrjohnson
  */
 
-#include "include/Gates.h"
+#include <gates.h>
 
 Gates::Gates() {
 

@@ -5,11 +5,11 @@
  *      Author: jobinrjohnson
  */
 
+#include <gates.h>
 #include <iostream>
 #include <string>
 #include <util.h>
 
-#include <Gates.h>
 #include <qubit.h>
 #include <measure.h>
 
