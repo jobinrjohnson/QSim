@@ -22,6 +22,7 @@ int main(int argc, char **argv) {
 
 	qubit q1 =  qubit(1,0);
 	Gates g =  Gates();
+	g.apply_harhmard();
 
 	return 0;
 
