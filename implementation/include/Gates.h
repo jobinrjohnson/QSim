@@ -13,15 +13,24 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_math.h>
+
+#include <qubit.h>
+
+#define GATE_HARDAMARD 1
+
 #include <iostream>
 
 class Gates {
 
+private:
+	gsl_matrix_complex * get_gate_matrix(int);
+
 public:
 	Gates();
 	virtual ~Gates();
-
 	void apply_harhmard();
+
+	void apply_gate(Qubit &, int);
 
 };
 
