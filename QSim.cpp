@@ -10,6 +10,7 @@
 #include <util.h>
 
 #include <Gates.h>
+#include <qubit.h>
 
 using namespace std;
 
@@ -19,8 +20,11 @@ int main(int argc, char **argv) {
 
 	printdebug(LOG_LEVEL_INFO, "Simulator Started");
 
-	Gates g =  Gates();
-	g.apply_harhmard();
+//	Gates g =  Gates();
+//	g.apply_harhmard();
+
+	Qubit q = Qubit();
+	q.print_state();
 
 	return 0;
 
