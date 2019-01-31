@@ -15,7 +15,7 @@
 
 class Qubit {
 
-private:
+protected:
 	gsl_vector_complex * v_state;
 
 public:

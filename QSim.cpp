@@ -19,17 +19,18 @@ int LOG_LEVEL = LOG_LEVEL_VERBOSE;
 
 int main(int argc, char **argv) {
 
-	printdebug(LOG_LEVEL_INFO, "Simulator Started");
-
 	Gates g = Gates();
-//	g.apply_harhmard();
 
+	printdebug(LOG_LEVEL_INFO, "Initialise a gate");
 	Qubit q = Qubit();
 	q.print_state();
 
-	g.apply_gate(q, GATE_PAULI_X);
+	printdebug(LOG_LEVEL_INFO, "Applying Hardamard Gate");
+
+	g.apply_gate(q, GATE_HARDAMARD);
 	q.print_state();
 
+	printdebug(LOG_LEVEL_INFO, "Applying Measurement Gate");
 	cout << Measure::get_measure(q);
 
 	return 0;
