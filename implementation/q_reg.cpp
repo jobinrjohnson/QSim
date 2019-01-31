@@ -24,9 +24,12 @@ QReg::QReg(int num_qubits) {
 
 }
 
+
+//TODO fix error from this by freeing pointers correctly
 QReg::~QReg() {
 
-	Qubit::~Qubit();
+	if(v_state != NULL)
+		gsl_vector_complex_free(v_state);
 
 }
 
@@ -38,7 +41,7 @@ void QReg::print_state() {
 	for (i = 0; i < num_states; i++) {
 
 		//TODO find a better way to convert to binary
-		std::bitset<3> binary(i);
+		std::bitset<16> binary(i);
 
 		if (i > 0) {
 			std::cout << " + ";
@@ -50,7 +53,7 @@ void QReg::print_state() {
 					<< "i";
 		}
 
-		std::cout << "|" << binary.to_string() << "⟩";
+		std::cout << "|" << binary.to_string().substr(16 - num_qubits) << "⟩";
 
 	}
 
@@ -125,6 +128,7 @@ gsl_matrix_complex * QReg::generate_gate_matrix(int qubit, int gate) {
 				accum = generateKorniker(accum, gate__matrix);
 			}
 
+
 		} else {
 
 			if (accum == NULL) {
@@ -136,6 +140,8 @@ gsl_matrix_complex * QReg::generate_gate_matrix(int qubit, int gate) {
 		}
 
 	}
+	gsl_matrix_complex_free(identity);
+	gsl_matrix_complex_free(gate__matrix);
 	print(accum);
 
 	return accum;
@@ -159,8 +165,9 @@ void QReg::apply_gate(int qubit, int GATE){
 	GSL_COMPLEX_ONE, gate_matrix, this->v_state,
 	GSL_COMPLEX_ZERO, op_qubit);
 
-	gsl_vector_complex_free(v_state);
-	v_state = op_qubit;
+	gsl_matrix_complex_free(gate_matrix);
+	gsl_vector_complex_memcpy(v_state,op_qubit);
+	gsl_vector_complex_free(op_qubit);
 
 
 }

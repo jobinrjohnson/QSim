@@ -31,7 +31,8 @@ Qubit::Qubit(double l_alpha, double l_beta, double l_alpha_imag = 0,
 
 Qubit::~Qubit() {
 	// Free Vector memory
-	gsl_vector_complex_free(v_state);
+	if(v_state != NULL)
+		gsl_vector_complex_free(v_state);
 }
 
 void Qubit::print_state() {
