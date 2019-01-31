@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
 	Qubit q = Qubit();
 	q.print_state();
 
-	g.apply_gate(q, GATE_HARDAMARD);
+	g.apply_gate(q, GATE_PAULI_X);
 	q.print_state();
 
 	cout << Measure::get_measure(q);

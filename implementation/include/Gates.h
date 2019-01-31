@@ -17,6 +17,7 @@
 #include <qubit.h>
 
 #define GATE_HARDAMARD 1
+#define GATE_PAULI_X 2
 
 #include <iostream>
 

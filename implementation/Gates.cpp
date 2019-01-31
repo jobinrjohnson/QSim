@@ -28,6 +28,16 @@ gsl_matrix_complex * Gates::get_gate_matrix(int gate_name) {
 				gsl_complex_rect(M_SQRT1_2, 0));
 
 		return hardmard_matrix;
+	}else if(gate_name == GATE_PAULI_X){
+
+		gsl_matrix_complex * pauli_x_matrix = gsl_matrix_complex_alloc(2, 2);
+		gsl_matrix_complex_set(pauli_x_matrix, 0, 0, gsl_complex_rect(0, 0));
+		gsl_matrix_complex_set(pauli_x_matrix, 0, 1, gsl_complex_rect(1, 0));
+		gsl_matrix_complex_set(pauli_x_matrix, 1, 0, gsl_complex_rect(1, 0));
+		gsl_matrix_complex_set(pauli_x_matrix, 1, 1, gsl_complex_rect(0, 0));
+
+		return pauli_x_matrix;
+
 	}
 	return NULL;
 
