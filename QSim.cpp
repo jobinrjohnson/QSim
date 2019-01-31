@@ -36,7 +36,11 @@ int main(int argc, char **argv) {
 //	cout << Measure::get_measure(q);
 
 	QReg reg = QReg(2);
-	reg.generate_gate_matrix(2);
+	reg.apply_gate(0, GATE_HARDAMARD);
+	reg.apply_gate(1, GATE_HARDAMARD);
+	reg.apply_gate(1, GATE_HARDAMARD);
+
+	reg.print_state();
 
 	return 0;
 

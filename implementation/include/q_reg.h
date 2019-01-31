@@ -9,19 +9,21 @@
 #define IMPLEMENTATION_Q_REG_H_
 
 #include <qubit.h>
+#include <gates.h>
 #include <math.h>
 #include <bitset>
 
-class QReg: private Qubit{
+class QReg: private Qubit, private Gates{
 
 private:
 	int num_qubits;
+	gsl_matrix_complex * generate_gate_matrix(int, int);
 
 public:
 	QReg(int);
 	virtual ~QReg();
 	void print_state();
-	gsl_matrix_complex * generate_gate_matrix(int);
+	void apply_gate(int, int);
 };
 
 #endif /* IMPLEMENTATION_Q_REG_H_ */

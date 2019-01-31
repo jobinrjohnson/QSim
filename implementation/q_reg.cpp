@@ -85,6 +85,9 @@ gsl_matrix_complex * generateKorniker(gsl_matrix_complex * a,
 
 //TODO remove this function
 void print(gsl_matrix_complex * a) {
+
+	return;
+
 	int i, j;
 	int m, p;
 
@@ -102,13 +105,9 @@ void print(gsl_matrix_complex * a) {
 
 }
 
-gsl_matrix_complex * QReg::generate_gate_matrix(int qubit = 1) {
+gsl_matrix_complex * QReg::generate_gate_matrix(int qubit, int gate) {
 
-	gsl_matrix_complex * gate__matrix = gsl_matrix_complex_alloc(2, 2);
-	gsl_matrix_complex_set(gate__matrix, 0, 0, gsl_complex_rect(0, 0));
-	gsl_matrix_complex_set(gate__matrix, 0, 1, gsl_complex_rect(1, 0));
-	gsl_matrix_complex_set(gate__matrix, 1, 0, gsl_complex_rect(1, 0));
-	gsl_matrix_complex_set(gate__matrix, 1, 1, gsl_complex_rect(0, 0));
+	gsl_matrix_complex * gate__matrix = Gates::get_gate_matrix(gate);
 
 	gsl_matrix_complex * identity = gsl_matrix_complex_alloc(2, 2);
 	gsl_matrix_complex_set_identity(identity);
@@ -143,3 +142,25 @@ gsl_matrix_complex * QReg::generate_gate_matrix(int qubit = 1) {
 
 }
 
+
+void QReg::apply_gate(int qubit, int GATE){
+
+
+	int num_states = pow(2, num_qubits);
+
+	gsl_matrix_complex * gate_matrix = generate_gate_matrix(qubit,GATE);
+	// Create an output temp qubit
+	gsl_vector_complex *op_qubit = NULL;
+	op_qubit = gsl_vector_complex_alloc(num_states);
+	gsl_vector_complex_set_all(op_qubit, GSL_COMPLEX_ZERO);
+
+	// get cross product
+	gsl_blas_zgemv(CblasNoTrans,
+	GSL_COMPLEX_ONE, gate_matrix, this->v_state,
+	GSL_COMPLEX_ZERO, op_qubit);
+
+	gsl_vector_complex_free(v_state);
+	v_state = op_qubit;
+
+
+}

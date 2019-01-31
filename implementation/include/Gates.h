@@ -23,7 +23,7 @@
 
 class Gates {
 
-private:
+protected:
 	gsl_matrix_complex * get_gate_matrix(int);
 
 public:
