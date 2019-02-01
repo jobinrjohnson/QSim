@@ -111,9 +111,8 @@ void print(gsl_matrix_complex * a) {
 
 }
 
-void QReg::compute_cnot_matrix(int a, int b) {
-	std::cout << "========================================" << std::endl;
-	int i;
+gsl_matrix_complex * QReg::compute_cnot_matrix(int a, int b) {
+	int i, m;
 
 	gsl_matrix_complex * full_matrix = gsl_matrix_complex_alloc(
 			pow(2, num_qubits), pow(2, num_qubits));
@@ -129,8 +128,6 @@ void QReg::compute_cnot_matrix(int a, int b) {
 		if (a_th) {
 			b_th = !b_th;
 		}
-
-		int m;
 		for (m = 0; m < num_qubits; m++) {
 
 			int m_th = (i & (1 << (num_qubits - m - 1))) == 0 ? 0 : 1;
@@ -151,56 +148,27 @@ void QReg::compute_cnot_matrix(int a, int b) {
 						gsl_complex_rect(0, 0));
 			}
 
-//			if (i == 2) {
-//				ccout<< m_th;
-//				print(one_q_matrix);
-//			}
-
 			if (ind_matrix == NULL) {
-				ccout<<"\nGenerating No Kornicker ......";
 				ind_matrix = gsl_matrix_complex_alloc(1, 2);
-				gsl_matrix_complex_memcpy(ind_matrix,one_q_matrix);
-//				ind_matrix = one_q_matrix;
-				print(ind_matrix);
-				ccout<<"MMMMMMMMMMMMMMMMMMMMMMMMMMMM";
+				gsl_matrix_complex_memcpy(ind_matrix, one_q_matrix);
 			} else {
-
-				ccout<<"\nGenerating Kornicker of ......";
-				print(ind_matrix);
-				ccout<<"And";
-				print(one_q_matrix);
-				ccout<<"----------------------------------";
-
 				ind_matrix = generateKorniker(ind_matrix, one_q_matrix);
-				print(ind_matrix);
-				ccout<<"MMMMMMMMMMMMMMMMMMMMMMMMMMMM";
 			}
 
-//			if (i == 2) {
-//				print(one_q_matrix);
-//				ccout<<m<<" nulledddd";
-//				print(ind_matrix);
-//			}
-
 		}
-
 
 		gsl_vector_complex * v = gsl_vector_complex_alloc(pow(2, num_qubits));
 
 		gsl_matrix_complex_get_row(v, ind_matrix, 0);
 		gsl_matrix_complex_set_row(full_matrix, i, v);
 
-		if (i == 2)
-			ccout<<"fffffffffffffffffffffffff"<<std::endl;
+		gsl_matrix_complex_free(ind_matrix);
+		gsl_vector_complex_free(v);
 
-		}
+	}
+	gsl_matrix_complex_free(one_q_matrix);
 
-	print(full_matrix);
-
-//	break;
-
-//	return NULL;
-
+	return full_matrix;
 }
 
 gsl_matrix_complex * QReg::generate_gate_matrix(int GATE, int qubit,
@@ -216,47 +184,7 @@ gsl_matrix_complex * QReg::generate_gate_matrix(int GATE, int qubit,
 	gsl_matrix_complex * accum = NULL;
 
 	if (GATE == GATE_CNOT) {
-
-		gate__matrix = Gates::get_gate_matrix(GATE_PAULI_X);
-
-//		std::cout << "Got"<<std::endl;
-
-		gsl_matrix_complex * c_matrix = gsl_matrix_complex_alloc(2, 2);
-		gsl_matrix_complex_set_zero(c_matrix);
-		gsl_matrix_complex_set(c_matrix, 0, 0, gsl_complex_rect(1, 0));
-		gsl_matrix_complex_set(c_matrix, 1, 1, gsl_complex_rect(1, 0));
-
-//		print(c_matrix);
-
-		for (i = 0; i < num_qubits; i++) {
-
-			if (i == qubit) {
-
-				if (accum == NULL) {
-					accum = c_matrix;
-				} else {
-					accum = generateKorniker(accum, c_matrix);
-				}
-
-			} else if (i == qubit2) {
-
-				if (accum == NULL) {
-					accum = gate__matrix;
-				} else {
-					accum = generateKorniker(accum, gate__matrix);
-				}
-
-			} else {
-
-				if (accum == NULL) {
-					accum = identity;
-				} else {
-					accum = generateKorniker(accum, identity);
-				}
-
-			}
-
-		}
+		accum = this->compute_cnot_matrix(qubit, qubit2);
 
 	} else {
 
@@ -294,12 +222,6 @@ gsl_matrix_complex * QReg::generate_gate_matrix(int GATE, int qubit,
 void QReg::apply_gate(int GATE, int qubit1, int qubit2) {
 
 	int num_states = pow(2, num_qubits);
-
-	this->compute_cnot_matrix(0, 2);
-
-	std::cout << std::endl << std::endl << std::endl;
-
-	return;
 
 	gsl_matrix_complex * gate_matrix = generate_gate_matrix(GATE, qubit1,
 			qubit2);
