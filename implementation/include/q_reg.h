@@ -17,13 +17,13 @@ class QReg: private Qubit, private Gates{
 
 private:
 	int num_qubits;
-	gsl_matrix_complex * generate_gate_matrix(int, int);
+	gsl_matrix_complex * generate_gate_matrix(int, int, int);
 
 public:
 	QReg(int);
 	virtual ~QReg();
 	void print_state();
-	void apply_gate(int, int);
+	void apply_gate(int, int, int qubit2 = -1);
 };
 
 #endif /* IMPLEMENTATION_Q_REG_H_ */

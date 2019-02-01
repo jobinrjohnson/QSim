@@ -24,11 +24,10 @@ QReg::QReg(int num_qubits) {
 
 }
 
-
 //TODO fix error from this by freeing pointers correctly
 QReg::~QReg() {
 
-	if(v_state != NULL)
+	if (v_state != NULL)
 		gsl_vector_complex_free(v_state);
 
 }
@@ -89,13 +88,14 @@ gsl_matrix_complex * generateKorniker(gsl_matrix_complex * a,
 //TODO remove this function
 void print(gsl_matrix_complex * a) {
 
-	return;
-
 	int i, j;
 	int m, p;
 
 	m = a->size1;
 	p = a->size2;
+
+	std::cout << std::endl;
+	std::cout << std::endl;
 
 	for (i = 0; i < m; i++) {
 		for (j = 0; j < p; j++) {
@@ -108,9 +108,10 @@ void print(gsl_matrix_complex * a) {
 
 }
 
-gsl_matrix_complex * QReg::generate_gate_matrix(int qubit, int gate) {
+gsl_matrix_complex * QReg::generate_gate_matrix(int GATE, int qubit,
+		int qubit2 = -1) {
 
-	gsl_matrix_complex * gate__matrix = Gates::get_gate_matrix(gate);
+	gsl_matrix_complex * gate__matrix = Gates::get_gate_matrix(GATE);
 
 	gsl_matrix_complex * identity = gsl_matrix_complex_alloc(2, 2);
 	gsl_matrix_complex_set_identity(identity);
@@ -118,23 +119,69 @@ gsl_matrix_complex * QReg::generate_gate_matrix(int qubit, int gate) {
 	int i;
 
 	gsl_matrix_complex * accum = NULL;
-	for (i = 0; i < num_qubits; i++) {
 
-		if (i == qubit) {
+	if (GATE == GATE_CNOT) {
+		gate__matrix = Gates::get_gate_matrix(GATE_PAULI_X);
 
-			if (accum == NULL) {
-				accum = gate__matrix;
+//		std::cout << "Got"<<std::endl;
+
+		gsl_matrix_complex * c_matrix = gsl_matrix_complex_alloc(2, 2);
+		gsl_matrix_complex_set_zero(c_matrix);
+		gsl_matrix_complex_set(c_matrix, 0, 0, gsl_complex_rect(1, 0));
+		gsl_matrix_complex_set(c_matrix, 1, 1, gsl_complex_rect(1, 0));
+
+		print(c_matrix);
+
+		for (i = 0; i < num_qubits; i++) {
+
+			if (i == qubit) {
+
+				if (accum == NULL) {
+					accum = c_matrix;
+				} else {
+					accum = generateKorniker(accum, c_matrix);
+				}
+
+			} else if (i == qubit2) {
+
+				if (accum == NULL) {
+					accum = gate__matrix;
+				} else {
+					accum = generateKorniker(accum, gate__matrix);
+				}
+
 			} else {
-				accum = generateKorniker(accum, gate__matrix);
+
+				if (accum == NULL) {
+					accum = identity;
+				} else {
+					accum = generateKorniker(accum, identity);
+				}
+
 			}
 
+		}
 
-		} else {
+	} else {
 
-			if (accum == NULL) {
-				accum = identity;
+		for (i = 0; i < num_qubits; i++) {
+
+			if (i == qubit) {
+
+				if (accum == NULL) {
+					accum = gate__matrix;
+				} else {
+					accum = generateKorniker(accum, gate__matrix);
+				}
+
 			} else {
-				accum = generateKorniker(accum, identity);
+
+				if (accum == NULL) {
+					accum = identity;
+				} else {
+					accum = generateKorniker(accum, identity);
+				}
+
 			}
 
 		}
@@ -148,13 +195,12 @@ gsl_matrix_complex * QReg::generate_gate_matrix(int qubit, int gate) {
 
 }
 
-
-void QReg::apply_gate(int qubit, int GATE){
-
+void QReg::apply_gate(int GATE, int qubit1, int qubit2) {
 
 	int num_states = pow(2, num_qubits);
 
-	gsl_matrix_complex * gate_matrix = generate_gate_matrix(qubit,GATE);
+	gsl_matrix_complex * gate_matrix = generate_gate_matrix(GATE, qubit1,
+			qubit2);
 	// Create an output temp qubit
 	gsl_vector_complex *op_qubit = NULL;
 	op_qubit = gsl_vector_complex_alloc(num_states);
@@ -166,8 +212,7 @@ void QReg::apply_gate(int qubit, int GATE){
 	GSL_COMPLEX_ZERO, op_qubit);
 
 	gsl_matrix_complex_free(gate_matrix);
-	gsl_vector_complex_memcpy(v_state,op_qubit);
+	gsl_vector_complex_memcpy(v_state, op_qubit);
 	gsl_vector_complex_free(op_qubit);
-
 
 }

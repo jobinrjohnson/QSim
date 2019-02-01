@@ -36,9 +36,9 @@ int main(int argc, char **argv) {
 //	cout << Measure::get_measure(q);
 
 	QReg reg = QReg(2);
-	reg.apply_gate(0, GATE_HARDAMARD);
-	reg.apply_gate(1, GATE_HARDAMARD);
-	reg.apply_gate(1, GATE_HARDAMARD);
+	reg.apply_gate(GATE_HARDAMARD,0); // @suppress("Invalid arguments")
+//	reg.apply_gate(GATE_HARDAMARD,1); // @suppress("Invalid arguments")
+	reg.apply_gate(GATE_CNOT,0,1); // @suppress("Invalid arguments")
 
 	reg.print_state();
 
