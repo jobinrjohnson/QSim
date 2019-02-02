@@ -7,9 +7,6 @@
 
 #include "q_reg.h"
 
-#define ccout std::cout
-#define cendl std::endl
-
 QReg::QReg(int num_qubits) {
 
 	this->num_qubits = num_qubits;
@@ -187,6 +184,10 @@ gsl_matrix_complex * QReg::generate_gate_matrix(int GATE, int qubit,
 		int qubit2 = -1) {
 
 	gsl_matrix_complex * gate__matrix = Gates::get_gate_matrix(GATE);
+
+	if (num_qubits == 1) {
+		return gate__matrix;
+	}
 
 	gsl_matrix_complex * identity = gsl_matrix_complex_alloc(2, 2);
 	gsl_matrix_complex_set_identity(identity);

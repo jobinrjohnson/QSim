@@ -14,6 +14,10 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_math.h>
 
+
+#define ccout std::cout
+#define cendl std::endl
+
 #include <qubit.h>
 
 #define GATE_HARDAMARD 1
