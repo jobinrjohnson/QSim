@@ -38,6 +38,21 @@ gsl_matrix_complex * Gates::get_gate_matrix(int gate_name) {
 
 		return pauli_x_matrix;
 
+	}else if(gate_name == GATE_T){
+
+		double gate_angle = 0;
+		if(gate_name == GATE_T){
+			gate_angle = M_PI_4;
+		}
+
+		gsl_matrix_complex * gate_matrix = gsl_matrix_complex_alloc(2, 2);
+		gsl_matrix_complex_set_all(gate_matrix, gsl_complex_rect(0, 0));
+
+		gsl_matrix_complex_set(gate_matrix, 0, 0, gsl_complex_rect(1, 0));
+		gsl_matrix_complex_set(gate_matrix, 1, 1, gsl_complex_rect(cos(gate_angle), sin(gate_angle)));
+
+		return gate_matrix;
+
 	}
 	return NULL;
 

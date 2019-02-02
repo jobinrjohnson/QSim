@@ -236,6 +236,7 @@ void QReg::apply_gate(int GATE, int qubit1, int qubit2) {
 
 	gsl_matrix_complex * gate_matrix = generate_gate_matrix(GATE, qubit1,
 			qubit2);
+
 // Create an output temp qubit
 	gsl_vector_complex *op_qubit = NULL;
 	op_qubit = gsl_vector_complex_alloc(num_states);
