@@ -19,6 +19,7 @@
 #define GATE_HARDAMARD 1
 #define GATE_PAULI_X 2
 #define GATE_CNOT 3
+#define GATE_SWAP 4
 
 #include <iostream>
 

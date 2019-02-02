@@ -111,7 +111,7 @@ void print(gsl_matrix_complex * a) {
 
 }
 
-gsl_matrix_complex * QReg::compute_cnot_matrix(int a, int b) {
+gsl_matrix_complex * QReg::compute_two_qubit_matrix(int GATE, int a, int b) {
 	int i, m;
 
 	gsl_matrix_complex * full_matrix = gsl_matrix_complex_alloc(
@@ -125,18 +125,30 @@ gsl_matrix_complex * QReg::compute_cnot_matrix(int a, int b) {
 
 		bool a_th = (i & (1 << (num_qubits - a - 1))) == 0 ? false : true;
 		bool b_th = (i & (1 << (num_qubits - b - 1))) == 0 ? false : true;
-		if (a_th) {
-			b_th = !b_th;
-		}
+
 		for (m = 0; m < num_qubits; m++) {
 
-			int m_th = (i & (1 << (num_qubits - m - 1))) == 0 ? 0 : 1;
+			bool m_th = (i & (1 << (num_qubits - m - 1))) == 0 ? false : true;
 
-			if (m == b) {
-				m_th = b_th ? 1 : 0;
+			if (GATE == GATE_SWAP) {
+
+				if (m == a) {
+					m_th = b_th;
+				} else if (m == b) {
+					m_th = a_th;
+				}
+
+			} else if (GATE == GATE_CNOT) {
+
+				if (m == b) {
+					if (a_th) {
+						b_th = !b_th;
+					}
+					m_th = b_th ? 1 : 0;
+				}
 			}
 
-			if (m_th == 1) {
+			if (m_th) {
 				gsl_matrix_complex_set(one_q_matrix, 0, 0,
 						gsl_complex_rect(0, 0));
 				gsl_matrix_complex_set(one_q_matrix, 0, 1,
@@ -183,8 +195,8 @@ gsl_matrix_complex * QReg::generate_gate_matrix(int GATE, int qubit,
 
 	gsl_matrix_complex * accum = NULL;
 
-	if (GATE == GATE_CNOT) {
-		accum = this->compute_cnot_matrix(qubit, qubit2);
+	if (GATE == GATE_CNOT || GATE == GATE_SWAP) {
+		accum = this->compute_two_qubit_matrix(GATE, qubit, qubit2);
 
 	} else {
 
@@ -213,7 +225,6 @@ gsl_matrix_complex * QReg::generate_gate_matrix(int GATE, int qubit,
 	}
 	gsl_matrix_complex_free(identity);
 	gsl_matrix_complex_free(gate__matrix);
-//	print(accum);
 
 	return accum;
 

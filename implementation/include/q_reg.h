@@ -18,7 +18,7 @@ class QReg: private Qubit, private Gates{
 private:
 	int num_qubits;
 	gsl_matrix_complex * generate_gate_matrix(int, int, int);
-	gsl_matrix_complex * compute_cnot_matrix(int, int);
+	gsl_matrix_complex * compute_two_qubit_matrix(int, int, int);
 
 public:
 	QReg(int);
