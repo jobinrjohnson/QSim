@@ -253,3 +253,37 @@ void QReg::apply_gate(int GATE, int qubit1, int qubit2) {
 	gsl_vector_complex_free(op_qubit);
 
 }
+
+int QReg::measure() {
+
+	int num_states = pow(2, num_qubits);
+	int i;
+	const gsl_rng_type * T;
+	gsl_rng * r;
+	gsl_rng_env_setup();
+	gsl_rng_default_seed = time(NULL);
+	T = gsl_rng_default;
+	r = gsl_rng_alloc(T);
+
+	double u_rand = gsl_rng_uniform(r);
+
+	gsl_rng_free(r);
+
+	double circle = 0;
+
+	for (i = 0; i < num_states; i++) {
+		circle += gsl_pow_2(
+				gsl_complex_abs(gsl_vector_complex_get(v_state, i)));
+
+		if (circle >= u_rand) {
+			return i;
+		}
+	}
+
+	return num_states;
+}
+
+std::string QReg::measure_bit() {
+	std::bitset<16> binary(this->measure());
+	return binary.to_string().substr(16 - num_qubits);
+}

@@ -25,6 +25,8 @@ public:
 	virtual ~QReg();
 	void print_state();
 	void apply_gate(int, int, int qubit2 = -1);
+	int measure();
+	std::string measure_bit();
 };
 
 #endif /* IMPLEMENTATION_Q_REG_H_ */
