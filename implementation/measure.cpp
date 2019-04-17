@@ -7,11 +7,12 @@
 
 #include <measure.h>
 
-Measure::Measure() {
+Measure::Measure()
+{
 	// TODO Auto-generated constructor stub
-
 }
 
-Measure::~Measure() {
+Measure::~Measure()
+{
 	// TODO Auto-generated destructor stub
 }

@@ -14,17 +14,18 @@
 #include <gsl/gsl_rng.h>
 #include <iostream>
 
-class Qubit {
+class Qubit
+{
 
-protected:
-	gsl_vector_complex * v_state;
+  protected:
+	gsl_vector_complex *v_state;
 
-public:
+  public:
 	Qubit();
 	Qubit(double, double, double, double);
 	virtual ~Qubit();
 	void print_state();
-	gsl_vector_complex * get_state();
+	gsl_vector_complex *get_state();
 	bool set_state(gsl_vector_complex *);
 };
 

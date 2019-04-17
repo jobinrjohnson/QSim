@@ -8,9 +8,11 @@
 #include <util.h>
 #include <iostream>
 
-char getLevel(unsigned short int level) {
+char getLevel(unsigned short int level)
+{
 	char type;
-	switch (level) {
+	switch (level)
+	{
 	case LOG_LEVEL_VERBOSE:
 		type = 'V';
 		break;
@@ -33,14 +35,15 @@ char getLevel(unsigned short int level) {
 	return type;
 }
 
-void printdebug(unsigned short int level, const char* message) {
+void printdebug(unsigned short int level, const char *message)
+{
 	char type = getLevel(level);
 
-	if (level < LOG_LEVEL) {
+	if (level < LOG_LEVEL)
+	{
 		return;
 	}
 
 	std::cout << type << ": " << message << "\n";
 	// TODO add debugging options
 }
-

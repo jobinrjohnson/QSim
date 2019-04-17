@@ -13,14 +13,15 @@
 #include <math.h>
 #include <bitset>
 
-class QReg: private Qubit, private Gates{
+class QReg : private Qubit, private Gates
+{
 
-private:
+  private:
 	int num_qubits;
-	gsl_matrix_complex * generate_gate_matrix(int, int, int);
-	gsl_matrix_complex * compute_two_qubit_matrix(int, int, int);
+	gsl_matrix_complex *generate_gate_matrix(int, int, int);
+	gsl_matrix_complex *compute_two_qubit_matrix(int, int, int);
 
-public:
+  public:
 	QReg(int);
 	virtual ~QReg();
 	void print_state();

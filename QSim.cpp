@@ -19,33 +19,34 @@ using namespace std;
 
 int LOG_LEVEL = LOG_LEVEL_VERBOSE;
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
 
-//	Gates g = Gates();
-//
-//	printdebug(LOG_LEVEL_INFO, "Initialise a gate");
-//	Qubit q = Qubit();
-//	q.print_state();
-//
-//	printdebug(LOG_LEVEL_INFO, "Applying Hardamard Gate");
-//
-//	g.apply_gate(q, GATE_HARDAMARD);
-//	q.print_state();
-//
-//	printdebug(LOG_LEVEL_INFO, "Applying Measurement Gate");
-//	cout << Measure::get_measure(q);
+	cout << "\n\n\n";
+	//	Gates g = Gates();
+	//
+	//	printdebug(LOG_LEVEL_INFO, "Initialise a gate");
+	//	Qubit q = Qubit();
+	//	q.print_state();
+	//
+	//	printdebug(LOG_LEVEL_INFO, "Applying Hardamard Gate");
+	//
+	//	g.apply_gate(q, GATE_HARDAMARD);
+	//	q.print_state();
+	//
+	//	printdebug(LOG_LEVEL_INFO, "Applying Measurement Gate");
+	//	cout << Measure::get_measure(q);
 
-	QReg reg = QReg(3);
-//	reg.apply_gate(GATE_T,0); // @suppress("Invalid arguments")
-	reg.apply_gate(GATE_HARDAMARD,0); // @suppress("Invalid arguments")
-	reg.apply_gate(GATE_HARDAMARD,1); // @suppress("Invalid arguments")
-//	reg.apply_gate(GATE_HARDAMARD,0); // @suppress("Invalid arguments")
-//	reg.apply_gate(GATE_SWAP,0,1); // @suppress("Invalid arguments")
+	QReg reg = QReg(2);
+	//	reg.apply_gate(GATE_T,0); // @suppress("Invalid arguments")
+	reg.apply_gate(GATE_PAULI_Z, 0);   // @suppress("Invalid arguments")
+	reg.apply_gate(GATE_HARDAMARD, 1); // @suppress("Invalid arguments")
+									   // reg.apply_gate(GATE_HARDAMARD,0); // @suppress("Invalid arguments")
+	//	reg.apply_gate(GATE_SWAP,0,1); // @suppress("Invalid arguments")
 
 	reg.print_state();
-	cout << reg.measure_bit();
+	cout << "On Measure : " << reg.measure_bit();
+	cout << "\n\n\n";
 
 	return 0;
-
 }
-

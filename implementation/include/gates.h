@@ -14,7 +14,6 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_math.h>
 
-
 #define ccout std::cout
 #define cendl std::endl
 
@@ -30,18 +29,18 @@
 
 #include <iostream>
 
-class Gates {
+class Gates
+{
 
-protected:
-	gsl_matrix_complex * get_gate_matrix(int);
+  protected:
+	gsl_matrix_complex *get_gate_matrix(int);
 
-public:
+  public:
 	Gates();
 	virtual ~Gates();
 	void apply_harhmard();
 
 	void apply_gate(Qubit &, int);
-
 };
 
 #endif /* IMPLEMENTATION_GATES_H_ */
