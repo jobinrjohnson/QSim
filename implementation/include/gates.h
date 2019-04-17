@@ -22,6 +22,8 @@
 
 #define GATE_HARDAMARD 1
 #define GATE_PAULI_X 2
+#define GATE_PAULI_Y 6
+#define GATE_PAULI_Z 7
 #define GATE_CNOT 3
 #define GATE_SWAP 4
 #define GATE_T 5

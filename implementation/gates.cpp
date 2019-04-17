@@ -38,6 +38,26 @@ gsl_matrix_complex * Gates::get_gate_matrix(int gate_name) {
 
 		return pauli_x_matrix;
 
+	}else if(gate_name == GATE_PAULI_Y){
+
+		gsl_matrix_complex * pauli_y_matrix = gsl_matrix_complex_alloc(2, 2);
+		gsl_matrix_complex_set(pauli_y_matrix, 0, 0, gsl_complex_rect(0, 0));
+		gsl_matrix_complex_set(pauli_y_matrix, 0, 1, gsl_complex_rect(0, -1));
+		gsl_matrix_complex_set(pauli_y_matrix, 1, 0, gsl_complex_rect(1, 0));
+		gsl_matrix_complex_set(pauli_y_matrix, 1, 1, gsl_complex_rect(0, 0));
+
+		return pauli_y_matrix;
+
+	}else if(gate_name == GATE_PAULI_Z){
+
+		gsl_matrix_complex * pauli_z_matrix = gsl_matrix_complex_alloc(2, 2);
+		gsl_matrix_complex_set(pauli_z_matrix, 0, 0, gsl_complex_rect(1, 0));
+		gsl_matrix_complex_set(pauli_z_matrix, 0, 1, gsl_complex_rect(0, 0));
+		gsl_matrix_complex_set(pauli_z_matrix, 1, 0, gsl_complex_rect(0, 0));
+		gsl_matrix_complex_set(pauli_z_matrix, 1, 1, gsl_complex_rect(-1, 0));
+
+		return pauli_z_matrix;
+
 	}else if(gate_name == GATE_T){
 
 		double gate_angle = 0;
