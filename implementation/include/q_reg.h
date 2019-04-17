@@ -23,8 +23,10 @@ class QReg : private Qubit, private Gates
 
   public:
 	QReg(int);
+	QReg();
 	virtual ~QReg();
 	void print_state();
+	void produce_instance(int);
 	void apply_gate(int, int, int qubit2 = -1);
 	int measure();
 	std::string measure_bit();
