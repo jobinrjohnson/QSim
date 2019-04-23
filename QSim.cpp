@@ -177,6 +177,36 @@ int parse_apply(std::string line, int line_no)
 				add_warn("No qubit index provided.", line_no);
 			}
 		}
+		else if (items[0].compare("CNOT") == 0)
+		{
+			if (items.size() == 3)
+			{
+				int qubit_no1 = atoi(items[1].c_str());
+				int qubit_no2 = atoi(items[2].c_str());
+				::q_reg.apply_gate(GATE_CNOT, qubit_no1, qubit_no2);
+				cout << "Applying CNOT on " << qubit_no1 << " and " << qubit_no2;
+				cout << endl;
+			}
+			else
+			{
+				add_warn("invalid qubit indices provided for CNOT.", line_no);
+			}
+		}
+		else if (items[0].compare("SWAP") == 0)
+		{
+			if (items.size() == 3)
+			{
+				int qubit_no1 = atoi(items[1].c_str());
+				int qubit_no2 = atoi(items[2].c_str());
+				::q_reg.apply_gate(GATE_SWAP, qubit_no1, qubit_no2);
+				cout << "Applying SWAP on " << qubit_no1 << " and " << qubit_no2;
+				cout << endl;
+			}
+			else
+			{
+				add_warn("invalid qubit indices provided for SWAP.", line_no);
+			}
+		}
 	}
 	else
 	{
