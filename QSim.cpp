@@ -42,23 +42,24 @@ std::vector<std::string> explode(std::string const &s, char delim)
 	return result;
 }
 
-int add_error(std::string error,int line_number){
-	
+void add_error(std::string m_error, int line_number)
+{
+	error.append("\n");
+	error.append("line " + std::to_string(line_number) + " : " + m_error);
 }
-int add_warn(std::string m_warning,int line_number){
+void add_warn(std::string m_warning, int line_number)
+{
 	warning.append("\n");
-	warning.append(m_warning);
+	warning.append("line " + std::to_string(line_number) + " : " + m_warning);
 }
 
-int parse_apply(std::string line)
+int parse_apply(std::string line, int line_no)
 {
 	std::cout << ">> " << line << std::endl;
 	if (line[0] == '#' || line.length() == 0)
 	{
 		return 0;
 	}
-
-	error.append(line);
 
 	std::vector<std::string> items = explode(line, ' ');
 
@@ -67,7 +68,7 @@ int parse_apply(std::string line)
 		int no_qubit = atoi(items[1].c_str());
 		if (no_qubit == 0)
 		{
-			error.append("Error : Quantum register size error.");
+			add_error("Quantum register size error.", line_no);
 			return -1;
 		}
 		::q_reg.produce_instance(no_qubit);
@@ -97,13 +98,13 @@ int parse_apply(std::string line)
 			}
 			else
 			{
-				add_warn("No qubit index provided.",0);
+				add_warn("No qubit index provided.", line_no);
 			}
 		}
 	}
 	else
 	{
-		error.append("Error : Quantum register not initialized.");
+		add_error("Error : Quantum register not initialized.", line_no);
 		return -1;
 	}
 
@@ -116,11 +117,12 @@ int read_cmd_line(char *filename)
 	ifstream fin;
 	fin.open(filename);
 	string line;
+	unsigned int line_no = 0;
 
 	while (fin)
 	{
 		getline(fin, line);
-		parse_apply(line);
+		parse_apply(line, ++line_no);
 	}
 
 	fin.close();
