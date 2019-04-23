@@ -74,7 +74,7 @@ int parse_apply(std::string line, int line_no)
 		::q_reg.produce_instance(no_qubit);
 		std::cout << "Register initialized for : " << no_qubit << " qubits" << std::endl;
 	}
-	else if (1) //(q_reg == NULL) TODO FIX this condition
+	else if (::q_reg.get_status() == STATUS_INITIALIZED)
 	{
 		if (items[0].compare("MEASURE") == 0)
 		{
@@ -208,9 +208,14 @@ int parse_apply(std::string line, int line_no)
 			}
 		}
 	}
-	else
+	else if(::q_reg.get_status() == STATUS_UNINITIALIZED)
 	{
-		add_error("Error : Quantum register not initialized.", line_no);
+		add_error("Quantum register not initialized.", line_no);
+		return -1;
+	}
+	else if(::q_reg.get_status() == STATUS_MEASURED)
+	{
+		add_error("Quantum register measurement done, no further calculations on it.", line_no);
 		return -1;
 	}
 

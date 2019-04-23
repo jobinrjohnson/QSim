@@ -9,25 +9,13 @@
 
 QReg::QReg(int num_qubits)
 {
-
-	this->num_qubits = num_qubits;
-	int num_states = pow(2, num_qubits);
-
-	v_state = gsl_vector_complex_alloc(num_states);
-	// initialise state vector to |0>
-
-	int i = 0;
-	gsl_vector_complex_set(v_state, i++, gsl_complex_rect(1, 0));
-
-	for (; i < num_states; i++)
-	{
-		gsl_vector_complex_set(v_state, i, gsl_complex_rect(0, 0));
-	}
+	this->produce_instance(num_qubits);
 }
-
 
 QReg::QReg()
 {
+	this->num_qubits = 0;
+	this->status = STATUS_UNINITIALIZED;
 }
 
 //TODO fix error from this by freeing pointers correctly
@@ -38,7 +26,8 @@ QReg::~QReg()
 		gsl_vector_complex_free(v_state);
 }
 
-void QReg::produce_instance(int num_qubits){
+void QReg::produce_instance(int num_qubits)
+{
 	this->num_qubits = num_qubits;
 	int num_states = pow(2, num_qubits);
 
@@ -52,6 +41,7 @@ void QReg::produce_instance(int num_qubits){
 	{
 		gsl_vector_complex_set(v_state, i, gsl_complex_rect(0, 0));
 	}
+	this->status = STATUS_INITIALIZED;
 }
 
 void QReg::print_state()
@@ -336,7 +326,13 @@ int QReg::measure()
 		}
 	}
 
+	this->status = STATUS_MEASURED;
 	return num_states;
+}
+
+int QReg::get_status()
+{
+	return this->status;
 }
 
 std::string QReg::measure_bit()
