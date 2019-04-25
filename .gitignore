@@ -3,6 +3,7 @@
 
 build/
 .project
+temp/
 
 # Eclipse IDE
 # ==============================

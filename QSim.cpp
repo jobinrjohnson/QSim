@@ -249,16 +249,12 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	cout << "\n\n\n";
-
 	return read_cmd_line(argv[1]);
 
-	cout << "\n\n\n";
 	QReg reg = QReg(2);
 	reg.apply_gate(GATE_PAULI_Z, 0);
 	reg.print_state();
 	cout << "On Measure : " << reg.measure_bit();
-	cout << "\n\n\n";
 
 	return 0;
 }
