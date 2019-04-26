@@ -45,14 +45,22 @@
       color: #fafafa !important;
     }
 
-    .col1>input[type='submit'] {
+    .btn-wrap {
       border-radius: 50%;
       position: absolute;
-      box-shadow: 2px 0px 3px 0px #909090;
       top: 5%;
       right: -37px;
       width: 70px;
       height: 70px;
+      padding: 5px;
+      background: #fafafa;
+    }
+    .col1 input[type='submit'] {
+      border-radius: 50%;
+      box-shadow: 2px 0px 3px 0px #909090;
+      top: 5%;
+      width: 100%;
+      height: 100%;
 
     }
   </style>
@@ -66,7 +74,9 @@
         <div class="p-5">
           <textarea name="code" class="form-control c1" rows="20" placeholder="Code Here"></textarea>
         </div>
-        <input type="submit" value="&#9658;" class="btn btn-primary">
+        <div class="btn-wrap">
+        	<input type="submit" value="&#9658;" class="btn btn-primary">
+    	</div>
       </form>
       <div class="col-md-8 p-5">
         <pre class="well" id="resluts"></pre>
