@@ -346,6 +346,10 @@ int QReg::measure()
 	return num_states;
 }
 
+int QReg::get_num_qubits(){
+	return this->num_qubits;
+}
+
 int QReg::get_status()
 {
 	return this->status;

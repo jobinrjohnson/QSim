@@ -36,6 +36,7 @@ public:
 	void produce_instance(int);
 	void apply_gate(int, int, int qubit2 = -1);
 	int measure();
+	int get_num_qubits();
 	std::string measure_bit();
 };
 
