@@ -73,10 +73,26 @@ void QReg::print_state()
 
 	std::cout << std::endl;
 }
+void QReg::print_p_amps()
+{
+
+	int num_states = pow(2, num_qubits);
+	int i;
+
+	for (i = 0; i < num_states; i++)
+	{
+
+		//TODO find a better way to convert to binary
+		std::bitset<16> binary(i);
+		std::cout << binary.to_string().substr(16 - num_qubits) << " => " << gsl_complex_abs2(gsl_vector_complex_get(v_state, i)) << std::endl;
+	}
+
+	std::cout << std::endl;
+}
 
 // TODO move to utils
-gsl_matrix_complex *generateKorniker(gsl_matrix_complex *a,
-									 gsl_matrix_complex *b)
+gsl_matrix_complex *generateKronecker(gsl_matrix_complex *a,
+									  gsl_matrix_complex *b)
 {
 	int i, j, k, l;
 
@@ -197,7 +213,7 @@ gsl_matrix_complex *QReg::compute_two_qubit_matrix(int GATE, int a, int b)
 			}
 			else
 			{
-				ind_matrix = generateKorniker(ind_matrix, one_q_matrix);
+				ind_matrix = generateKronecker(ind_matrix, one_q_matrix);
 			}
 		}
 
@@ -251,7 +267,7 @@ gsl_matrix_complex *QReg::generate_gate_matrix(int GATE, int qubit,
 				}
 				else
 				{
-					accum = generateKorniker(accum, gate__matrix);
+					accum = generateKronecker(accum, gate__matrix);
 				}
 			}
 			else
@@ -263,7 +279,7 @@ gsl_matrix_complex *QReg::generate_gate_matrix(int GATE, int qubit,
 				}
 				else
 				{
-					accum = generateKorniker(accum, identity);
+					accum = generateKronecker(accum, identity);
 				}
 			}
 		}

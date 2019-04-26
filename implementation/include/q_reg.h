@@ -32,6 +32,7 @@ public:
 	virtual ~QReg();
 	int get_status();
 	void print_state();
+	void print_p_amps();
 	void produce_instance(int);
 	void apply_gate(int, int, int qubit2 = -1);
 	int measure();
