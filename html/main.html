@@ -11,6 +11,7 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
     integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o"
     crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
   <style>
     body {
       margin: 0;
@@ -55,42 +56,167 @@
       padding: 5px;
       background: #fafafa;
     }
+
     .col1 input[type='submit'] {
       border-radius: 50%;
       box-shadow: 2px 0px 3px 0px #909090;
       top: 5%;
       width: 100%;
       height: 100%;
-
     }
+
+    .col2 {
+      height: 100vh;
+      overflow: auto;
+    }
+
+    .det_row {
+      margin: 20px 5px;
+      background: #007bff;
+      padding: 15px 5px;
+      color: white;
+      box-shadow: 0px 1px 4px 2px #b7b7b7;
+    }
+
+    .det_row .btn-link {
+      font-weight: 400;
+      color: white;
+      text-decoration: none;
+      border: 1px white solid;
+      border-radius: 0;
+    }
+
+    .det_row .btn-link:hover {
+      background: white;
+      color: #007bff;
+    }
+
+.modal-dialog-primary  .modal-header{
+  background: #007bff;
+  color: white;
+  border-radius: 0;
+}
+
   </style>
 </head>
 
 <body>
 
   <div class="container-fluid">
-    <div class="row">
+    <div class="row align-items-center">
       <form method="POST" class="col-md-4 col1" id="main_form">
         <div class="p-5">
           <textarea name="code" class="form-control c1" rows="20" placeholder="Code Here"></textarea>
         </div>
         <div class="btn-wrap">
-        	<input type="submit" value="&#9658;" class="btn btn-primary">
-    	</div>
+          <input type="submit" value="&#9658;" class="btn btn-primary">
+        </div>
       </form>
-      <div class="col-md-8 p-5">
-        <pre class="well" id="resluts"></pre>
+      <div class="col-md-8 p-5 col2">
+        <div class="row det_row align-items-center">
+          <div class="col-auto">
+            <div class="well" id="resluts">
+                <h2>N/A</h2> <small>Waiting for execution..</small>
+            </div>
+          </div>
+          <div class="col text-right">
+            <button class="btn btn-link" data-toggle="modal" data-target="#myModal">View Detailed report</button>
+          </div>
+        </div>
+        <br><br>
+        <canvas id="myChart"></canvas>
       </div>
     </div>
   </div>
 
+
+
+
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable modal-dialog-primary">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Detailed execution report</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <pre id="exec_res"></pre>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
   <script>
+    var chart = null;
     $(document).ready(function () {
+
+      var ctx = document.getElementById('myChart').getContext('2d');
+
       $('#main_form').on('submit', function (e) {
         e.preventDefault();
-        $('#resluts').text("Executing...");
+        $('#resluts').html("<h2>N/A</h2> <small>Waiting for execution..</small>");
         $.post("", $("#main_form").serialize(), function (data) {
-          $('#resluts').text(data);
+          var resluts = data.split("====================================================");
+
+          if (chart != null) {
+            chart.clear();
+            chart.destroy();
+          }
+
+          // GENERATE PROBABILITY DENSITY GRAPH
+          var densities = resluts[3].split('\n');
+          var graph_labels = [];
+          var graph_values = [];
+          densities.forEach(function (element) {
+            if (element.trim() != "") {
+              key_pair = element.split(" => ");
+              graph_labels.push(key_pair[0]);
+              graph_values.push(key_pair[1]);
+            }
+          });
+          chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: graph_labels,
+              datasets: [{
+                label: 'Results over iterations.',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: graph_values
+              }]
+            },
+            options: {
+              legend: {
+                display: false
+              },
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    suggestedMin: 0,
+                    suggestedMax: 1
+                  }
+                }]
+              }
+            }
+          });
+
+
+          $('#resluts').html("<h2>" + resluts[4].trim() + "</h2> <small>Measured Output</small>");
+          $("#exec_res").text(resluts[0]);
+
+
+
+
+
+
+
         });
       });
     });
