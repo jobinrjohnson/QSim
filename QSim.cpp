@@ -251,6 +251,10 @@ int read_cmd_line(char *filename)
 	cout << error << endl;
 	cout << "====================================================" << endl;
 	::q_reg.print_p_amps();
+	cout << "====================================================" << endl;
+
+	std::bitset<16> binary(::q_reg.measure());
+	cout << binary.to_string().substr(16 - ::q_reg.get_num_qubits());
 
 	return 1;
 }
