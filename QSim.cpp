@@ -207,12 +207,12 @@ int parse_apply(std::string line, int line_no)
 			}
 		}
 	}
-	else if(::q_reg.get_status() == STATUS_UNINITIALIZED)
+	else if (::q_reg.get_status() == STATUS_UNINITIALIZED)
 	{
 		add_error("Quantum register not initialized.", line_no);
 		return -1;
 	}
-	else if(::q_reg.get_status() == STATUS_MEASURED)
+	else if (::q_reg.get_status() == STATUS_MEASURED)
 	{
 		add_error("Quantum register measurement done, no further calculations on it.", line_no);
 		return -1;
@@ -232,17 +232,25 @@ int read_cmd_line(char *filename)
 	while (fin)
 	{
 		getline(fin, line);
-		if(line == ""){
+		if (line == "")
+		{
 			continue;
 		}
 		parse_apply(line, ++line_no);
 		cout << "Φ : ";
 		::q_reg.print_state();
-		cout<<endl;
+		cout << endl;
 		line = "";
 	}
 
 	fin.close();
+
+	cout << "====================================================" << endl;
+	cout << warning << endl;
+	cout << "====================================================" << endl;
+	cout << error << endl;
+	cout << "====================================================" << endl;
+	::q_reg.print_p_amps();
 
 	return 1;
 }
