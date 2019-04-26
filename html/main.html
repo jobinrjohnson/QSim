@@ -1,0 +1,53 @@
+<html>
+
+<head>
+  <title>QSim</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+    integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o"
+    crossorigin="anonymous"></script>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+    integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o"
+    crossorigin="anonymous"></script>
+    <style>
+      body{
+        margin: 0;
+      }
+      .c1{
+        height: 100vh !important;
+        margin: 0;
+      }
+      .col1{
+        position: relative;
+        margin-bottom: 0;
+      }
+      .col1 > input[type='submit']{
+        border-radius: 50%;
+        position: absolute;
+        top: 10%;
+        right: -40px;
+        width: 100px;
+        height: 100px;
+        
+      }
+    </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="row">
+      <form method="POST" class="col-md-4 col1">
+        <textarea name="code" class="form-control c1" rows="20" placeholder="Code Here"></textarea>
+        <input type="submit" value="Execute" class="btn btn-primary">
+      </form>
+    </div>
+  </div>
+
+
+</body>
+
+</html>

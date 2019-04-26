@@ -7,6 +7,15 @@ import time
 
 class S(BaseHTTPRequestHandler):
 
+    def do_GET(self):
+
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+
+        f=open("html/main.html", "r")
+        self.wfile.write(f.read())
+
     def do_POST(self):
 
         form = cgi.FieldStorage(
