@@ -79,7 +79,6 @@ int parse_apply(std::string line, int line_no)
 		if (items[0].compare("MEASURE") == 0)
 		{
 			std::cout << "Measuring the register : " << ::q_reg.measure() << std::endl;
-			::q_reg.print_state();
 			return 0;
 		}
 		else if (items[0].compare("HARDAMARD") == 0)
@@ -233,7 +232,14 @@ int read_cmd_line(char *filename)
 	while (fin)
 	{
 		getline(fin, line);
+		if(line == ""){
+			continue;
+		}
 		parse_apply(line, ++line_no);
+		cout << "Φ : ";
+		::q_reg.print_state();
+		cout<<endl;
+		line = "";
 	}
 
 	fin.close();
