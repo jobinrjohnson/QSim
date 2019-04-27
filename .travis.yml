@@ -11,3 +11,8 @@ addons:
       - cmake
       - gsl-bin
       - libgsl0-dev
+script:
+  - mkdir build
+  - cd build
+  - cmake ../
+  - make
