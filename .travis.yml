@@ -1,0 +1,13 @@
+language: cpp
+compiler:
+  - clang
+  - gcc
+
+addons:
+  apt:
+    sources:
+      - george-edison55-precise-backports
+    packages:
+      - cmake
+      - gsl-bin
+      - libgsl0-dev
