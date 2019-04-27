@@ -1,4 +1,7 @@
+
 # QSim
+
+![Travis CI STatus](https://travis-ci.org/jobinrjohnson/QSim.svg?branch=master)
 
 A Universal Gate Quantum computing Simulator written in C/C++
 
