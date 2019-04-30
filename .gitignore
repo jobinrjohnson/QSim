@@ -4,6 +4,7 @@
 build/
 .project
 temp/
+main.pyc
 
 # Eclipse IDE
 # ==============================
