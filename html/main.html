@@ -11,8 +11,13 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
     integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o"
     crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
   <style>
+    * {
+      font-family: 'Open Sans', sans-serif;
+    }
+
     body {
       margin: 0;
       background: #fafafa;
@@ -20,6 +25,7 @@
 
     .c1 {
       margin: 0;
+      text-transform: uppercase;
       border: none !important;
       height: calc(100% - 98px) !important;
       width: 100% !important;
@@ -41,7 +47,7 @@
       position: relative;
       height: 100vh !important;
       margin-bottom: 0;
-      border-right: solid thick #007bff;
+      border-right: solid thick #0062cc;
       background: #263238 !important;
       color: #fafafa !important;
     }
@@ -60,7 +66,6 @@
     .col1 input[type='submit'] {
       border-radius: 50%;
       box-shadow: 2px 0px 3px 0px #909090;
-      top: 5%;
       width: 100%;
       height: 100%;
     }
@@ -68,11 +73,12 @@
     .col2 {
       height: 100vh;
       overflow: auto;
+      padding: 3rem;
     }
 
     .det_row {
       margin: 20px 5px;
-      background: #007bff;
+      background: #0062cc;
       padding: 15px 5px;
       color: white;
       box-shadow: 0px 1px 4px 2px #b7b7b7;
@@ -91,12 +97,73 @@
       color: #007bff;
     }
 
-.modal-dialog-primary  .modal-header{
-  background: #007bff;
-  color: white;
-  border-radius: 0;
-}
+    .modal-dialog-primary .modal-header {
+      background: #0062cc;
+      color: white;
+      border-radius: 0;
+    }
 
+    .modal-header .close {
+      color: white;
+    }
+
+    @media only screen and (max-width: 767px) {
+
+      .col1 {
+        border-left: solid 10px #0062cc;
+        border-right: none;
+      }
+
+
+      .btn-wrap {
+        top: unset;
+        right: 10px;
+        bottom: 20px;
+        width: 60px;
+        height: 60px;
+        padding: 5px;
+        background: #fafafa;
+      }
+
+      .col2 {
+        padding: 0rem;
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .det_row {
+        margin: 0px 0px;
+        margin-bottom: 30px;
+        box-shadow: 0px 1px 4px 2px #b7b7b7;
+      }
+
+      .rbtn {
+        background: white;
+        width: 50px;
+        height: 50px;
+        padding: 0;
+        margin: 0;
+        border-radius: 50%;
+        box-shadow: 0 0 6px 1px #484848;
+      }
+
+      .modal-dialog-centered.modal-dialog-scrollable .modal-content {
+        max-height: none;
+        height: 100vh;
+        border: none;
+        border-radius: 0;
+      }
+
+      .modal-dialog {
+        margin: 0;
+        height: 100vh !important;
+      }
+
+      .modal {
+        background: white;
+      }
+
+    }
   </style>
 </head>
 
@@ -112,15 +179,19 @@
           <input type="submit" value="&#9658;" class="btn btn-primary">
         </div>
       </form>
-      <div class="col-md-8 p-5 col2">
+
+      <div class="col-md-8 col2" id="report_div">
         <div class="row det_row align-items-center">
           <div class="col-auto">
             <div class="well" id="resluts">
-                <h2>N/A</h2> <small>Waiting for execution..</small>
+              <h2>N/A</h2> <small>Waiting for execution..</small>
             </div>
           </div>
           <div class="col text-right">
-            <button class="btn btn-link" data-toggle="modal" data-target="#myModal">View Detailed report</button>
+            <button class="btn btn-link d-none d-md-inline-block" data-toggle="modal" data-target="#myModal">View
+              Detailed report</button>
+            <button class="btn rbtn d-inline-block d-md-none" data-toggle="modal"
+              data-target="#myModal">&#8505;</button>
           </div>
         </div>
         <br><br>
@@ -138,13 +209,13 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Detailed execution report</h4>
+          <h6 class="modal-title text-uppercase"><b>Detailed execution report</b></h6>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 
         <!-- Modal body -->
         <div class="modal-body">
-          <pre id="exec_res"></pre>
+          <pre id="exec_res">Waiting for execution</pre>
         </div>
 
       </div>
@@ -161,15 +232,22 @@
 
       $('#main_form').on('submit', function (e) {
         e.preventDefault();
-        $('#resluts').html("<h2>N/A</h2> <small>Waiting for execution..</small>");
+        $("#exec_res").text("Waiting for execution");
+
+        if (window.innerWidth < 768) {
+          $('html, body').animate({
+            scrollTop: $("#report_div").offset().top
+          }, 600);
+        }
+
+        if (chart != null) {
+          chart.clear();
+          chart.destroy();
+        }
+
+        $('#resluts').html("<h2>N/A</h2> <small>Executing please wait..</small>");
         $.post("", $("#main_form").serialize(), function (data) {
           var resluts = data.split("====================================================");
-
-          if (chart != null) {
-            chart.clear();
-            chart.destroy();
-          }
-
           // GENERATE PROBABILITY DENSITY GRAPH
           var densities = resluts[3].split('\n');
           var graph_labels = [];
@@ -210,11 +288,6 @@
 
           $('#resluts').html("<h2>" + resluts[4].trim() + "</h2> <small>Measured Output</small>");
           $("#exec_res").text(resluts[0]);
-
-
-
-
-
 
 
         });
