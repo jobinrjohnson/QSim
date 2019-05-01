@@ -6,8 +6,7 @@ app = Flask(__name__)
 
 
 def serve_homepage():
-    f=open("html/main.html", "r")
-    return f.read()
+    return render_template("main.html")
 
 
 def process_post():
