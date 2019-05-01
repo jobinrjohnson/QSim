@@ -3,6 +3,9 @@
 <head>
   <title>QSim</title>
   <meta charset="UTF-8">
+  <meta name="theme-color" content="#263238">
+  <meta name="msapplication-navbutton-color" content="#263238">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#263238">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://code.jquery.com/jquery-3.4.0.min.js"
     integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
@@ -110,8 +113,11 @@
     @media only screen and (max-width: 767px) {
 
       .col1 {
-        border-left: solid 10px #0062cc;
         border-right: none;
+      }
+
+      .col1>.p-5 {
+        padding: 3rem 1rem !important;
       }
 
 
@@ -132,7 +138,6 @@
 
       .det_row {
         margin: 0px 0px;
-        margin-bottom: 30px;
         box-shadow: 0px 1px 4px 2px #b7b7b7;
       }
 
@@ -172,7 +177,7 @@
     <div class="row align-items-center">
       <form method="POST" class="col-md-4 col1" id="main_form">
         <div class="p-5">
-          <textarea name="code" id="m_code" class="form-control c1" rows="20" placeholder="Code Here"></textarea>
+          <textarea name="code" id="m_code" class="form-control c1" rows="20" placeholder="Code Here">QREG 3</textarea>
         </div>
         <div class="btn-wrap">
           <input type="submit" value="&#9658;" id="sendbtn" class="btn btn-primary">
@@ -233,7 +238,8 @@
 
     $(document).ready(function () {
 
-      var ctx = document.getElementById('myChart').getContext('2d');
+      var m_canvas = document.getElementById('myChart');
+      ctx = m_canvas.getContext('2d');
 
       $('#main_form').on('submit', function (e) {
         e.preventDefault();
@@ -254,8 +260,12 @@
         $("#exec_res").text("Waiting for execution");
 
         if (window.innerWidth < 768) {
-          $('html, body').animate({
-            scrollTop: $("#report_div").offset().top
+          setTimeout(function () {
+            var offset = 0;
+            offset = $("#report_div").offset().top;
+            $('html, body').animate({
+              scrollTop: offset
+            }, 300);
           }, 600);
         }
 
@@ -280,23 +290,54 @@
               graph_values.push(key_pair[1]);
             }
           });
+
+          var multiplier = 30;
+
+          if (window.innerWidth >= 768) {
+            multiplier = 8;
+            if (graph_labels.length < 20) {
+              multiplier = 12;
+            }
+            if (graph_labels.length > 200) {
+              multiplier = 5;
+            }
+          } else {
+            multiplier = 15;
+            if (graph_labels.length < 5) {
+              multiplier = 50;
+            }
+            else if (graph_labels.length < 10) {
+              multiplier = 30;
+            }
+            else if (graph_labels.length < 20) {
+              multiplier = 20;
+            }
+            else if (graph_labels.length > 200) {
+              multiplier = 10;
+            }
+          }
+
+
+          m_canvas.setAttribute("height", graph_labels.length * multiplier + "px")
+
           chart = new Chart(ctx, {
-            type: 'bar',
+            type: 'horizontalBar',
             data: {
               labels: graph_labels,
               datasets: [{
-                label: 'Results over iterations.',
+                label: 'Probablistic amplitude.',
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 data: graph_values
               }]
             },
             options: {
+              responsive: true,
               legend: {
                 display: false
               },
               scales: {
-                yAxes: [{
+                xAxes: [{
                   ticks: {
                     suggestedMin: 0,
                     suggestedMax: 1
