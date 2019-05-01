@@ -206,6 +206,10 @@ int parse_apply(std::string line, int line_no)
 				add_warn("invalid qubit indices provided for SWAP.", line_no);
 			}
 		}
+		else
+		{
+			add_error("Invalid operation.", line_no);
+		}
 	}
 	else if (::q_reg.get_status() == STATUS_UNINITIALIZED)
 	{
@@ -237,6 +241,10 @@ int read_cmd_line(char *filename)
 			continue;
 		}
 		parse_apply(line, ++line_no);
+		if (error != "")
+		{
+			break;
+		}
 		cout << "Φ : ";
 		::q_reg.print_state();
 		cout << endl;
@@ -246,15 +254,29 @@ int read_cmd_line(char *filename)
 	fin.close();
 
 	cout << "====================================================" << endl;
+	if (::q_reg.get_status() != STATUS_MEASURED)
+	{
+		add_warn("Register not measured. use 'MEASURE'", ++line_no);
+	}
 	cout << warning << endl;
 	cout << "====================================================" << endl;
 	cout << error << endl;
 	cout << "====================================================" << endl;
-	::q_reg.print_p_amps();
+	if (::q_reg.get_status() == STATUS_MEASURED)
+	{
+		::q_reg.print_p_amps();
+	}
 	cout << "====================================================" << endl;
 
-	std::bitset<16> binary(::q_reg.measure());
-	cout << binary.to_string().substr(16 - ::q_reg.get_num_qubits());
+	if (::q_reg.get_status() == STATUS_MEASURED)
+	{
+		std::bitset<16> binary(::q_reg.measure());
+		cout << binary.to_string().substr(16 - ::q_reg.get_num_qubits());
+	}
+	else
+	{
+		cout << "N/A";
+	}
 
 	return 1;
 }
