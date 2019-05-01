@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, make_response
 import time
 from subprocess import Popen, PIPE
 import os
@@ -12,9 +12,9 @@ def serve_homepage():
 def process_post():
     code = request.form['code']
 
-    file_name = "temp/" +str(time.time()) + ".txt"
+    file_name = "temp/" + str(time.time()) + ".txt"
 
-    file1 = open(file_name,"w")
+    file1 = open(file_name, "w")
     file1.write(code)
     file1.close()
 
@@ -31,9 +31,11 @@ def index():
     else:
         return serve_homepage()
 
+
 @app.route('/sw.js')
 def sw_js():
-    return render_template("sw.js")
+    headers = {'Content-Type': 'application/javascript'}
+    return make_response(render_template('sw.js'),200,headers)
     
 
 
