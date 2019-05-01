@@ -71,6 +71,11 @@ int parse_apply(std::string line, int line_no)
 			add_error("Quantum register size error.", line_no);
 			return -1;
 		}
+		else if (no_qubit > 5)
+		{
+			add_error("Register size error. Number of Qubits cannot exceed 5", line_no);
+			return -1;
+		}
 		::q_reg.produce_instance(no_qubit);
 		std::cout << "Register initialized for : " << no_qubit << " qubits" << std::endl;
 	}
