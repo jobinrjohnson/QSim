@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request, render_template
 import time
 from subprocess import Popen, PIPE
 import os
-app = Flask(__name__)
+app = Flask(__name__, static_folder="web", template_folder="web")
 
 
 def serve_homepage():
@@ -30,6 +30,11 @@ def index():
         return process_post()
     else:
         return serve_homepage()
+
+@app.route('/sw.js')
+def sw_js():
+    return render_template("sw.js")
+    
 
 
 if __name__ == '__main__':
