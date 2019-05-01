@@ -116,9 +116,8 @@
 
 
       .btn-wrap {
-        top: unset;
+        top: 1.8rem;
         right: 10px;
-        bottom: 20px;
         width: 60px;
         height: 60px;
         padding: 5px;
@@ -173,10 +172,10 @@
     <div class="row align-items-center">
       <form method="POST" class="col-md-4 col1" id="main_form">
         <div class="p-5">
-          <textarea name="code" class="form-control c1" rows="20" placeholder="Code Here"></textarea>
+          <textarea name="code" id="m_code" class="form-control c1" rows="20" placeholder="Code Here"></textarea>
         </div>
         <div class="btn-wrap">
-          <input type="submit" value="&#9658;" class="btn btn-primary">
+          <input type="submit" value="&#9658;" id="sendbtn" class="btn btn-primary">
         </div>
       </form>
 
@@ -226,12 +225,32 @@
 
   <script>
     var chart = null;
+    var EXECUTING = false
+
+    function send_error(msg) {
+      alert(msg)
+    }
+
     $(document).ready(function () {
 
       var ctx = document.getElementById('myChart').getContext('2d');
 
       $('#main_form').on('submit', function (e) {
         e.preventDefault();
+
+        var final_code = $("#m_code").val().trim().toUpperCase();
+
+        if (EXECUTING) {
+          send_error("Execution in progress. Please wait.");
+          return
+        }
+        if (!final_code) {
+          send_error("Please enter code to continue.");
+          return;
+        }
+
+        EXECUTING = true;
+        $("#m_code").val(final_code)
         $("#exec_res").text("Waiting for execution");
 
         if (window.innerWidth < 768) {
@@ -244,6 +263,8 @@
           chart.clear();
           chart.destroy();
         }
+
+        $("#sendbtn").fadeOut("slow");
 
         $('#resluts').html("<h2>N/A</h2> <small>Executing please wait..</small>");
         $.post("", $("#main_form").serialize(), function (data) {
@@ -283,13 +304,16 @@
                 }]
               }
             }
-          });
+          })
 
 
           $('#resluts').html("<h2>" + resluts[4].trim() + "</h2> <small>Measured Output</small>");
           $("#exec_res").text(resluts[0]);
 
 
+        }).always(function () {
+          EXECUTING = false;
+          $("#sendbtn").fadeIn("slow");
         });
       });
     });
