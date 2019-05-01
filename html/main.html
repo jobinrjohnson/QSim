@@ -110,6 +110,35 @@
       color: white;
     }
 
+    .err_ct {
+      background: red;
+      color: white;
+    }
+
+    .warn_ct {
+      background: rgb(196, 183, 0);
+      color: white;
+    }
+
+    .err_ct,
+    .warn_ct {
+      display: inline-block;
+      width: 36px;
+      height: 36px;
+      padding: 6px;
+      text-align: center;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    #exec_status{
+      padding: 5px;
+    }
+
+    #exec_status > *{
+      border-radius: 0;
+    }
+
     @media only screen and (max-width: 767px) {
 
       .col1 {
@@ -139,16 +168,46 @@
       .det_row {
         margin: 0px 0px;
         box-shadow: 0px 1px 4px 2px #b7b7b7;
+        background: #263238 !important;
+        margin-bottom: 10px;
+      }
+
+      .modal-dialog-primary .modal-header {
+        background: #263238 !important;
+      }
+
+      #myChart {
+        padding-left: 15px;
+        padding-right: 15px;
       }
 
       .rbtn {
         background: white;
         width: 50px;
         height: 50px;
-        padding: 0;
+        padding: 5px;
         margin: 0;
         border-radius: 50%;
+      }
+
+      .rbtn>i {
+        background: #0062cc;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        border-radius: 50%;
+        color: white;
+        font-size: 20px;
+        font-style: normal;
         box-shadow: 0 0 6px 1px #484848;
+        align-items: center;
+        text-align: center;
+        margin: auto;
+      }
+
+      .rbtn>i>b {
+        display: block;
+        margin: auto;
       }
 
       .modal-dialog-centered.modal-dialog-scrollable .modal-content {
@@ -192,19 +251,19 @@
             </div>
           </div>
           <div class="col text-right">
+            <span class="err_ct">0</span>
+            <span class="warn_ct">0</span>
             <button class="btn btn-link d-none d-md-inline-block" data-toggle="modal" data-target="#myModal">View
               Detailed report</button>
             <button class="btn rbtn d-inline-block d-md-none" data-toggle="modal"
-              data-target="#myModal">&#8505;</button>
+              data-target="#myModal"><i><b>&#8505;</b></i></button>
           </div>
         </div>
-        <br><br>
+        <div id="exec_status"></div>
         <canvas id="myChart"></canvas>
       </div>
     </div>
   </div>
-
-
 
 
   <div class="modal fade" id="myModal">
@@ -230,19 +289,82 @@
 
   <script>
     var chart = null;
+    var m_canvas = null;
     var EXECUTING = false
+    var CHART_CLEARED = true;
 
     function send_error(msg) {
       alert(msg)
     }
 
+    function setupGraph(graph_labels, graph_values) {
+      var multiplier = 30;
+
+      if (window.innerWidth >= 768) {
+        multiplier = 8;
+        if (graph_labels.length < 20) {
+          multiplier = 12;
+        }
+        if (graph_labels.length > 200) {
+          multiplier = 5;
+        }
+      } else {
+        multiplier = 15;
+        if (graph_labels.length < 5) {
+          multiplier = 50;
+        }
+        else if (graph_labels.length < 10) {
+          multiplier = 30;
+        }
+        else if (graph_labels.length < 20) {
+          multiplier = 20;
+        }
+        else if (graph_labels.length > 200) {
+          multiplier = 10;
+        }
+      }
+
+      m_canvas.setAttribute("height", graph_labels.length * multiplier + "px")
+
+      chart = new Chart(ctx, {
+        type: 'horizontalBar',
+        data: {
+          labels: graph_labels,
+          datasets: [{
+            label: 'Probablistic amplitude.',
+            backgroundColor: 'rgb(0, 98, 204)',
+            borderColor: 'rgb(36, 49, 56)',
+            data: graph_values
+          }]
+        },
+        options: {
+          responsive: true,
+          legend: {
+            display: false
+          },
+          scales: {
+            xAxes: [{
+              ticks: {
+                suggestedMin: 0,
+                suggestedMax: 1
+              }
+            }]
+          }
+        }
+      });
+      CHART_CLEARED = false;
+    }
+
     $(document).ready(function () {
 
-      var m_canvas = document.getElementById('myChart');
+      m_canvas = document.getElementById('myChart');
       ctx = m_canvas.getContext('2d');
 
       $('#main_form').on('submit', function (e) {
         e.preventDefault();
+        $("#exec_status").empty();
+        $(".err_ct").text("0");
+        $(".warn_ct").text("0");
 
         var final_code = $("#m_code").val().trim().toUpperCase();
 
@@ -269,9 +391,10 @@
           }, 600);
         }
 
-        if (chart != null) {
+        if (chart != null && !CHART_CLEARED) {
           chart.clear();
           chart.destroy();
+          CHART_CLEARED = true;
         }
 
         $("#sendbtn").fadeOut("slow");
@@ -291,65 +414,23 @@
             }
           });
 
-          var multiplier = 30;
-
-          if (window.innerWidth >= 768) {
-            multiplier = 8;
-            if (graph_labels.length < 20) {
-              multiplier = 12;
-            }
-            if (graph_labels.length > 200) {
-              multiplier = 5;
-            }
-          } else {
-            multiplier = 15;
-            if (graph_labels.length < 5) {
-              multiplier = 50;
-            }
-            else if (graph_labels.length < 10) {
-              multiplier = 30;
-            }
-            else if (graph_labels.length < 20) {
-              multiplier = 20;
-            }
-            else if (graph_labels.length > 200) {
-              multiplier = 10;
-            }
+          if (graph_labels.length > 0) {
+            setupGraph(graph_labels, graph_values);
           }
-
-
-          m_canvas.setAttribute("height", graph_labels.length * multiplier + "px")
-
-          chart = new Chart(ctx, {
-            type: 'horizontalBar',
-            data: {
-              labels: graph_labels,
-              datasets: [{
-                label: 'Probablistic amplitude.',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: graph_values
-              }]
-            },
-            options: {
-              responsive: true,
-              legend: {
-                display: false
-              },
-              scales: {
-                xAxes: [{
-                  ticks: {
-                    suggestedMin: 0,
-                    suggestedMax: 1
-                  }
-                }]
-              }
-            }
-          })
 
 
           $('#resluts').html("<h2>" + resluts[4].trim() + "</h2> <small>Measured Output</small>");
           $("#exec_res").text(resluts[0]);
+
+          if (resluts[1].trim()) {
+            $(".warn_ct").text((resluts[1].match("/\n/g") || '').length + 1)
+            $("#exec_status").append('<div class="alert alert-warning">' + resluts[1] + '</div>')
+          }
+          if (resluts[2].trim()) {
+            $(".err_ct").text((resluts[2].match("/\n/g") || '').length + 1)
+            $("#exec_status").append('<div class="alert alert-danger">' + resluts[2] + '</div>')
+          }
+
 
 
         }).always(function () {
