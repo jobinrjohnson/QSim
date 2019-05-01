@@ -338,6 +338,7 @@ int QReg::measure()
 
 		if (circle >= u_rand)
 		{
+			this->status = STATUS_MEASURED;
 			return i;
 		}
 	}
@@ -346,7 +347,8 @@ int QReg::measure()
 	return num_states;
 }
 
-int QReg::get_num_qubits(){
+int QReg::get_num_qubits()
+{
 	return this->num_qubits;
 }
 
