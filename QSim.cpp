@@ -36,7 +36,7 @@ std::vector<std::string> explode(std::string const &s, char delim)
 
 	for (std::string token; std::getline(iss, token, delim);)
 	{
-		result.push_back(std::move(token));
+		result.push_back(std::move(trim(token)));
 	}
 
 	return result;
@@ -237,6 +237,7 @@ int read_cmd_line(char *filename)
 	while (fin)
 	{
 		getline(fin, line);
+		line = trim(line);
 		if (line[0] == '#' || line.empty())
 		{
 			++line_no;

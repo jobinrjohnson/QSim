@@ -8,6 +8,9 @@
 #ifndef UTILS_UTIL_H_
 #define UTILS_UTIL_H_
 
+#include <iostream>
+#include <algorithm>
+
 // LOG LEVELS
 #define LOG_LEVEL_VERBOSE 0
 #define LOG_LEVEL_INFO 1
@@ -19,5 +22,6 @@ extern int LOG_LEVEL;
 
 extern void printdebug(unsigned short int, const char *);
 extern char getLevel(unsigned short int);
+extern std::string trim(const std::string &);
 
 #endif /* UTILS_UTIL_H_ */

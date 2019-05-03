@@ -6,7 +6,6 @@
  */
 
 #include <util.h>
-#include <iostream>
 
 char getLevel(unsigned short int level)
 {
@@ -47,3 +46,20 @@ void printdebug(unsigned short int level, const char *message)
 	std::cout << type << ": " << message << "\n";
 	// TODO add debugging options
 }
+
+
+std::string trim(const std::string &s)
+{
+	auto start = s.begin();
+	while (start != s.end() && std::isspace(*start)) {
+		start++;
+	}
+
+	auto end = s.end();
+	do {
+		end--;
+	} while (std::distance(start, end) > 0 && std::isspace(*end));
+
+	return std::string(start, end + 1);
+}
+
