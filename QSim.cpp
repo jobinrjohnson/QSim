@@ -56,10 +56,6 @@ void add_warn(std::string m_warning, int line_number)
 int parse_apply(std::string line, int line_no)
 {
 	std::cout << ">> " << line << std::endl;
-	if (line[0] == '#' || line.length() == 0)
-	{
-		return 0;
-	}
 
 	std::vector<std::string> items = explode(line, ' ');
 
@@ -241,8 +237,9 @@ int read_cmd_line(char *filename)
 	while (fin)
 	{
 		getline(fin, line);
-		if (line == "")
+		if (line[0] == '#' || line.empty())
 		{
+			++line_no;
 			continue;
 		}
 		parse_apply(line, ++line_no);
