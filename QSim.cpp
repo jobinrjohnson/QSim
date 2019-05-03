@@ -86,7 +86,7 @@ int parse_apply(std::string line, int line_no)
 			std::cout << "Measuring the register : " << ::q_reg.measure() << std::endl;
 			return 0;
 		}
-		else if (items[0].compare("HARDAMARD") == 0)
+		else if (items[0].compare("H") == 0)
 		{
 			if (items.size() > 1)
 			{
