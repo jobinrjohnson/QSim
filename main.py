@@ -6,7 +6,7 @@ app = Flask(__name__, static_folder="web", template_folder="web")
 
 
 def serve_homepage():
-    return render_template("main.html")
+    return render_template("main.html", ga_id=os.getenv('GOOGLE_ANALYTICS_ID',""))
 
 
 def process_post():
@@ -35,8 +35,7 @@ def index():
 @app.route('/sw.js')
 def sw_js():
     headers = {'Content-Type': 'application/javascript'}
-    return make_response(render_template('sw.js'),200,headers)
-    
+    return make_response(render_template('sw.js'), 200, headers)
 
 
 if __name__ == '__main__':

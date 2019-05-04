@@ -131,11 +131,11 @@
       margin-right: 5px;
     }
 
-    #exec_status{
+    #exec_status {
       padding: 5px;
     }
 
-    #exec_status > *{
+    #exec_status>* {
       border-radius: 0;
     }
 
@@ -293,12 +293,23 @@ MEASURE</textarea>
 
   <script src="web/app.js"></script>
   <script>
-    if('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
-        .then(function() {
-              console.log('Service Worker Registered');
+        .then(function () {
+          console.log('Service Worker Registered');
         });
     }
+  </script>
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_id }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', '{{ ga_id }}');
   </script>
 
 </body>
