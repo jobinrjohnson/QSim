@@ -13,7 +13,16 @@ self.addEventListener('install', function (e) {
   );
 });
 self.addEventListener('activate', event => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+      caches.keys().then(function(keyList) {
+        return Promise.all(keyList.map(function(key) {
+          if (key !== cacheName) {
+            return caches.delete(key);
+          }
+        }));
+      })
+  );
+  return self.clients.claim();
 });
 self.addEventListener('fetch', event => {
   event.respondWith(
