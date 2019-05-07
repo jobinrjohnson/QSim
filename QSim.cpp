@@ -139,12 +139,12 @@ int parse_apply(std::string line, int line_no)
 				add_warn("No qubit index provided.", line_no);
 			}
 		}
-		else if (items[0].compare("X") == 0)
+		else if (items[0].compare("Z") == 0)
 		{
 			if (items.size() > 1)
 			{
 				int _counter = 0;
-				cout << "Applying PAULI X on";
+				cout << "Applying PAULI Z on";
 				for (_counter = 1; _counter < items.size(); _counter++)
 				{
 					int qubit_no = atoi(items[_counter].c_str());
@@ -293,11 +293,4 @@ int main(int argc, char **argv)
 	}
 
 	return read_cmd_line(argv[1]);
-
-	QReg reg = QReg(2);
-	reg.apply_gate(GATE_PAULI_Z, 0);
-	reg.print_state();
-	cout << "On Measure : " << reg.measure_bit();
-
-	return 0;
 }
