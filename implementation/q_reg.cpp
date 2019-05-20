@@ -158,8 +158,8 @@ gsl_matrix_complex *QReg::compute_two_qubit_matrix(int GATE, int a, int b)
 
 		gsl_matrix_complex *ind_matrix = NULL;
 
-		bool a_th = (i & (1 << (num_qubits - a - 1))) == 0 ? false : true;
-		bool b_th = (i & (1 << (num_qubits - b - 1))) == 0 ? false : true;
+		bool a_th = (i & (1 << (a))) == 0 ? false : true;
+		bool b_th = (i & (1 << (b))) == 0 ? false : true;
 
 		for (m = 0; m < num_qubits; m++)
 		{
@@ -169,11 +169,11 @@ gsl_matrix_complex *QReg::compute_two_qubit_matrix(int GATE, int a, int b)
 			if (GATE == GATE_SWAP)
 			{
 
-				if (m == a)
+				if (num_qubits - 1 - m == a)
 				{
 					m_th = b_th;
 				}
-				else if (m == b)
+				else if (num_qubits - 1 - m == b)
 				{
 					m_th = a_th;
 				}
@@ -181,7 +181,7 @@ gsl_matrix_complex *QReg::compute_two_qubit_matrix(int GATE, int a, int b)
 			else if (GATE == GATE_CNOT)
 			{
 
-				if (m == b)
+				if (num_qubits - 1 - m == b)
 				{
 					if (a_th)
 					{
@@ -258,7 +258,7 @@ gsl_matrix_complex *QReg::generate_gate_matrix(int GATE, int qubit,
 		for (i = 0; i < num_qubits; i++)
 		{
 
-			if (i == qubit)
+			if (num_qubits - i - 1 == qubit)
 			{
 
 				if (accum == NULL)
