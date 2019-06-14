@@ -17,7 +17,6 @@
 #include <utility>
 
 #include <qubit.h>
-#include <measure.h>
 
 #include <q_reg.h>
 
